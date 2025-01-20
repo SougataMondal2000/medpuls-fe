@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Navbar from "./Navbar";
+import { baseURL } from "../urls";
 
 const Profile = () => {
   const router = useRouter();
@@ -39,9 +40,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchDoctorData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:5000/doctor/${profile?.id}`
-        );
+        const response = await axios.get(`${baseURL}/doctor/${profile?.id}`);
         setDoctor(response.data);
         setLoading(false);
       } catch (error) {
@@ -57,7 +56,7 @@ const Profile = () => {
   const handlePreviewPrescription = async (patientId) => {
     try {
       const patientResponse = await axios.get(
-        `http://localhost:5000/patients/${patientId}`
+        `${baseURL}/patients/${patientId}`
       );
       if (patientResponse.data.previousPrescriptions?.length > 0) {
         setSelectedPrescription(patientResponse.data);
@@ -67,8 +66,6 @@ const Profile = () => {
       console.error("Error fetching prescription:", error);
     }
   };
-
-  console.log(selectedPrescription, "raju");
 
   if (loading) {
     return (

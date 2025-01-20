@@ -11,6 +11,7 @@ import {
   FileText,
   PlusCircle,
 } from "lucide-react";
+import { baseURL } from "../urls";
 
 const PrescriptionForm = ({ user }) => {
   const initialState = {
@@ -65,25 +66,22 @@ const PrescriptionForm = ({ user }) => {
     e.preventDefault();
 
     try {
-      const patientResponse = await axios.post(
-        "http://localhost:5000/patients",
-        {
-          name: formData.name,
-          age: formData.age,
-          sex: formData.sex,
-          phone: formData.phone,
-          medicalHistory: formData.medicalHistory
-            .split("\n")
-            .filter((line) => line.trim())
-            .map((line) => line.replace(/^\d+\.\s*/, "")),
-          parentId: user._id,
-        }
-      );
+      const patientResponse = await axios.post(`${baseURL}/patients`, {
+        name: formData.name,
+        age: formData.age,
+        sex: formData.sex,
+        phone: formData.phone,
+        medicalHistory: formData.medicalHistory
+          .split("\n")
+          .filter((line) => line.trim())
+          .map((line) => line.replace(/^\d+\.\s*/, "")),
+        parentId: user._id,
+      });
 
       const patientId = patientResponse.data._id;
 
       const prescriptionResponse = await axios.post(
-        "http://localhost:5000/prescriptions",
+        `${baseURL}/prescriptions`,
         {
           patientDetails: patientId,
           doctorDetails: user._id,
@@ -97,16 +95,16 @@ const PrescriptionForm = ({ user }) => {
 
       const prescriptionId = prescriptionResponse.data._id;
 
-      await axios.put(`http://localhost:5000/add-patient/${user._id}`, {
+      await axios.put(`${baseURL}/add-patient/${user._id}`, {
         patientId: patientId,
       });
 
-      await axios.put(`http://localhost:5000/add-prescription/${patientId}`, {
+      await axios.put(`${baseURL}/add-prescription/${patientId}`, {
         prescriptionId: prescriptionId,
       });
 
       alert("Prescription saved successfully!");
-      setFormData(initialState); // Reset to initial state
+      setFormData(initialState);
     } catch (error) {
       console.error("Error saving prescription:", error);
       alert("Failed to save prescription. Please try again.");
