@@ -23,7 +23,7 @@ const PrescriptionForm = ({ user }) => {
     medicines: [{ name: "", dosage: { timing: "", amount: "" } }],
     description: "",
   };
-
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState(initialState);
 
   const handleChange = (e) => {
@@ -64,6 +64,7 @@ const PrescriptionForm = ({ user }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
       const patientResponse = await axios.post(`${baseURL}/patients`, {
@@ -276,10 +277,21 @@ const PrescriptionForm = ({ user }) => {
           </div>
 
           <button
+            disabled={isLoading}
             type="submit"
             className="w-full px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors duration-200 shadow-sm"
           >
-            Generate Prescription
+            {isLoading ? (
+              <BeatLoader
+                color={"white"}
+                loading={isLoading}
+                size={10}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+              />
+            ) : (
+              "Generate Prescription"
+            )}
           </button>
         </form>
       </div>

@@ -15,6 +15,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { baseURL } from "../urls";
+import { BeatLoader } from "react-spinners";
 
 export const MediPulsLogo = () => (
   <div className="flex items-center text-emerald-600">
@@ -106,7 +107,7 @@ const PasswordStrengthIndicator = ({ password }) => {
 
 const SignupPage = () => {
   const router = useRouter();
-
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -133,7 +134,7 @@ const SignupPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setIsLoading(true);
     if (formData.password !== formData.confirmPassword) {
       setMessage("Passwords do not match");
       return;
@@ -157,6 +158,7 @@ const SignupPage = () => {
         password: "",
         confirmPassword: "",
       });
+      setIsLoading(false);
       router.push("/login");
     } catch (error) {
       setMessage(
@@ -352,10 +354,21 @@ const SignupPage = () => {
               </div>
 
               <button
+                disabled={isLoading}
                 type="submit"
                 className="w-full bg-emerald-500 text-white py-3 px-4 rounded-lg hover:bg-emerald-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 shadow-[0_4px_14px_rgba(16,185,129,0.4)] hover:shadow-[0_6px_20px_rgba(16,185,129,0.6)] transition-all duration-200"
               >
-                Join MediPuls
+                {isLoading ? (
+                  <BeatLoader
+                    color={"white"}
+                    loading={isLoading}
+                    size={10}
+                    aria-label="Loading Spinner"
+                    data-testid="loader"
+                  />
+                ) : (
+                  "Sign Up"
+                )}
               </button>
 
               <p className="text-center text-gray-600 mt-4">

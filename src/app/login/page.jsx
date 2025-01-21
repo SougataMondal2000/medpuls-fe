@@ -5,6 +5,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { baseURL } from "../urls";
+import { BeatLoader } from "react-spinners";
 
 const MediPulsLogo = () => (
   <div className="flex items-center gap-2 text-emerald-600">
@@ -21,6 +22,7 @@ const LoginPage = () => {
   });
 
   const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
@@ -30,6 +32,7 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const response = await axios.post(`${baseURL}/login`, formData);
       setMessage(response.data.message);
@@ -42,6 +45,8 @@ const LoginPage = () => {
         error.response?.data?.message ||
           "Something went wrong. Please try again."
       );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -144,8 +149,19 @@ const LoginPage = () => {
               <button
                 type="submit"
                 className="w-full bg-emerald-500 text-white py-3 px-4 rounded-lg hover:bg-emerald-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 shadow-[0_4px_14px_rgba(16,185,129,0.4)] hover:shadow-[0_6px_20px_rgba(16,185,129,0.6)] transition-all duration-200"
+                disabled={isLoading}
               >
-                Sign In
+                {isLoading ? (
+                  <BeatLoader
+                    color={"white"}
+                    loading={isLoading}
+                    size={10}
+                    aria-label="Loading Spinner"
+                    data-testid="loader"
+                  />
+                ) : (
+                  "Sign In"
+                )}
               </button>
 
               <p className="text-center text-gray-600 mt-4">
