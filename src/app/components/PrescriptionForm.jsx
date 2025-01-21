@@ -12,6 +12,7 @@ import {
   PlusCircle,
 } from "lucide-react";
 import { baseURL } from "../urls";
+import { BeatLoader } from "react-spinners";
 
 const PrescriptionForm = ({ user }) => {
   const initialState = {
