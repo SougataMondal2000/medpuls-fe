@@ -269,7 +269,6 @@ const PatientRegistrationForm = () => {
               </div>
             </div>
 
-            {/* Contact Information */}
             <div className="bg-emerald-50 p-6 rounded-xl">
               <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
                 <Mail className="h-5 w-5 text-emerald-600" />
@@ -307,7 +306,6 @@ const PatientRegistrationForm = () => {
               </div>
             </div>
 
-            {/* Address */}
             <div className="bg-emerald-50 p-6 rounded-xl">
               <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
                 <MapPin className="h-5 w-5 text-emerald-600" />
@@ -388,7 +386,6 @@ const PatientRegistrationForm = () => {
               </div>
             </div>
 
-            {/* Medical Information */}
             <div className="bg-emerald-50 p-6 rounded-xl">
               <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
                 <Heart className="h-5 w-5 text-emerald-600" />

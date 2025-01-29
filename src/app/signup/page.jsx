@@ -10,6 +10,8 @@ import {
   EyeOff,
   CheckCircle2,
   XCircle,
+  MapPin,
+  Pen,
 } from "lucide-react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -115,17 +117,36 @@ const SignupPage = () => {
     phoneNo: "",
     password: "",
     confirmPassword: "",
+    clinicName: "",
+    clinicAddress: {
+      addressLine1: "",
+      addressLine2: "",
+      pincode: "",
+      city: "",
+      state: "",
+    },
+    signature: null,
   });
 
   const [message, setMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [passwordsMatch, setPasswordsMatch] = useState(true);
+  const [image, setImage] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-
+    if (name.includes("clinicAddress.")) {
+      const addressField = name.split(".")[1];
+      setFormData((prev) => ({
+        ...prev,
+        clinicAddress: {
+          ...prev.clinicAddress,
+          [addressField]: value,
+        },
+      }));
+    }
     if (name === "confirmPassword" || name === "password") {
       const otherField = name === "password" ? "confirmPassword" : "password";
       setPasswordsMatch(value === formData[otherField]);
@@ -135,21 +156,53 @@ const SignupPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+
     if (formData.password !== formData.confirmPassword) {
       setMessage("Passwords do not match");
       return;
     }
 
-    const backendData = {
-      doctorName: `${formData.firstName} ${formData.lastName}`.trim(),
-      email: formData.email,
-      phoneNo: formData.phoneNo,
-      password: formData.password,
-    };
-
     try {
-      const response = await axios.post(`${baseURL}/signup`, backendData);
+      const formDataToSend = new FormData();
+      formDataToSend.append(
+        "doctorName",
+        `${formData.firstName} ${formData.lastName}`.trim()
+      );
+      formDataToSend.append("email", formData.email);
+      formDataToSend.append("phoneNo", formData.phoneNo);
+      formDataToSend.append("password", formData.password);
+      formDataToSend.append("clinicName", formData.clinicName);
+
+      formDataToSend.append(
+        "clinicAddress[addressLine1]",
+        formData.clinicAddress.addressLine1
+      );
+      formDataToSend.append(
+        "clinicAddress[addressLine2]",
+        formData.clinicAddress.addressLine2
+      );
+      formDataToSend.append("clinicAddress[city]", formData.clinicAddress.city);
+      formDataToSend.append(
+        "clinicAddress[state]",
+        formData.clinicAddress.state
+      );
+      formDataToSend.append(
+        "clinicAddress[pincode]",
+        formData.clinicAddress.pincode
+      );
+
+      if (image) {
+        formDataToSend.append("signature", image);
+      }
+
+      const response = await axios.post(`${baseURL}/signup`, formDataToSend, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
       setMessage(response.data.message);
+
       setFormData({
         firstName: "",
         lastName: "",
@@ -157,7 +210,16 @@ const SignupPage = () => {
         phoneNo: "",
         password: "",
         confirmPassword: "",
+        clinicName: "",
+        clinicAddress: {
+          addressLine1: "",
+          addressLine2: "",
+          pincode: "",
+          city: "",
+          state: "",
+        },
       });
+
       setIsLoading(false);
       router.push("/login");
     } catch (error) {
@@ -165,6 +227,7 @@ const SignupPage = () => {
         error.response?.data?.message ||
           "Something went wrong. Please try again."
       );
+      setIsLoading(false);
     }
   };
 
@@ -172,6 +235,8 @@ const SignupPage = () => {
     "w-full px-4 py-3 border border-emerald-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white shadow-[0_2px_8px_rgba(0,0,0,0.08)]";
   const labelClasses =
     "block font-medium mb-1 text-gray-700 flex items-center gap-2 max-md:text-xs";
+
+  console.log(formData, "raju");
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-emerald-50 via-white to-emerald-50">
@@ -185,7 +250,7 @@ const SignupPage = () => {
           </div>
         </div>
 
-        <div className="w-full lg:w-1/2 p-8 md:p-12">
+        <div className="w-full lg:w-1/2 p-8 md:p-12 overflow-y-auto h-[70vh]">
           <div className="lg:hidden mb-8">
             <MediPulsLogo />
           </div>
@@ -278,6 +343,134 @@ const SignupPage = () => {
                     placeholder="+1 (555) 000-0000"
                   />
                 </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4">
+                <div>
+                  <label htmlFor="email" className={labelClasses}>
+                    <Mail className="w-5 h-5 text-emerald-600" />
+                    Clinic Name
+                  </label>
+                  <input
+                    type="text"
+                    id="clinicName"
+                    name="clinicName"
+                    value={formData.clinicName}
+                    onChange={handleChange}
+                    required
+                    className={inputClasses}
+                    placeholder="doctor@example.com"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                  <MapPin className="h-5 w-5 text-emerald-600" />
+                  Clinic Details
+                </h3>
+                <div className="grid grid-cols-1 gap-6">
+                  <div>
+                    <label htmlFor="addressLine1" className={labelClasses}>
+                      Address Line 1
+                    </label>
+                    <input
+                      type="text"
+                      id="addressLine1"
+                      name="clinicAddress.addressLine1"
+                      value={formData.clinicAddress.addressLine1}
+                      onChange={handleChange}
+                      className={inputClasses}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="addressLine2" className={labelClasses}>
+                      Address Line 2
+                    </label>
+                    <input
+                      type="text"
+                      id="addressLine2"
+                      name="clinicAddress.addressLine2"
+                      value={formData.clinicAddress.addressLine2}
+                      onChange={handleChange}
+                      className={inputClasses}
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                      <label htmlFor="city" className={labelClasses}>
+                        City
+                      </label>
+                      <input
+                        type="text"
+                        id="city"
+                        name="clinicAddress.city"
+                        value={formData.clinicAddress.city}
+                        onChange={handleChange}
+                        className={inputClasses}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="state" className={labelClasses}>
+                        State
+                      </label>
+                      <input
+                        type="text"
+                        id="state"
+                        name="clinicAddress.state"
+                        value={formData.clinicAddress.state}
+                        onChange={handleChange}
+                        className={inputClasses}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="pincode" className={labelClasses}>
+                        Pincode
+                      </label>
+                      <input
+                        type="text"
+                        id="pincode"
+                        name="clinicAddress.pincode"
+                        value={formData.clinicAddress.pincode}
+                        onChange={handleChange}
+                        className={inputClasses}
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4">
+                <label htmlFor="email" className={labelClasses}>
+                  <Pen className="w-5 h-5 text-emerald-600" />
+                  Add Signature
+                </label>
+                <input
+                  type="file"
+                  id="image"
+                  accept="image/*"
+                  onChange={(e) => setImage(e.target.files?.[0] || null)}
+                  className="hidden"
+                />
+                <label
+                  htmlFor="image"
+                  className="cursor-pointer bg-emerald-600 text-white px-4 py-2 rounded-lg transition-all duration-200"
+                >
+                  Choose File
+                </label>
+                {image && (
+                  <div className="mt-2">
+                    <img
+                      src={URL.createObjectURL(image)}
+                      alt="Preview"
+                      className="w-16 h-16 object-cover rounded-full border border-gray-300"
+                    />
+                  </div>
+                )}
               </div>
 
               <div className="grid grid-cols-2 gap-4">
