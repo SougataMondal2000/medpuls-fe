@@ -107,18 +107,21 @@ export default function LandingPage() {
               >
                 Contact
               </a>
-              <Link
-                href="/login"
-                className="px-6 py-2 rounded-full text-emerald-600 hover:text-emerald-700 transition-colors"
-              >
-                Sign In
-              </Link>
-              <Link
-                href="/signup"
-                className="px-6 py-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white hover:from-emerald-600 hover:to-teal-600 transition-all transform hover:scale-105 hover:shadow-lg"
-              >
-                Sign Up
-              </Link>
+              <div className="flex gap-2 items-center">
+                <Link
+                  href="/login"
+                  className="px-6 py-2 rounded-full font-semibold border border-emerald-600 text-emerald-600 relative overflow-hidden transition-colors duration-300 group hover:text-white"
+                >
+                  <span className="relative z-10">Sign In</span>
+                  <div className="absolute inset-0 bg-emerald-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+                </Link>
+                <Link
+                  href="/signup"
+                  className="px-6 py-2 rounded-full font-semibold border border-emerald-600 bg-gradient-to-r from-emerald-500 to-teal-500 text-white hover:from-emerald-600 hover:to-teal-600 transition-all transform hover:scale-105 hover:shadow-lg"
+                >
+                  Sign Up
+                </Link>
+              </div>
             </div>
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
