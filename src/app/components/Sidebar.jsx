@@ -1,6 +1,6 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import {
   ChevronLeft,
   ChevronRight,
@@ -23,12 +23,16 @@ export default function Sidebar({ children }) {
   const [page, setPage] = useState("create-prescription");
   const [isCollapsed, setIsCollapsed] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
 
   const handleLogout = () => {
     Cookies.remove("token");
     Cookies.remove("profile");
     router.push("/login");
   };
+
+  const isAuthPage =
+    pathname === "/login" || pathname === "/signup" || pathname === "/";
 
   const menuItems = [
     {
@@ -105,6 +109,14 @@ export default function Sidebar({ children }) {
     setPage(id);
     router.push(path);
   };
+
+  if (isAuthPage) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
+        {children}
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-screen bg-gray-100">

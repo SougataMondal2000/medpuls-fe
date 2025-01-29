@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "MediPuls",
-  description: "MediPuls",
+  title: "MedPuls",
+  description: "MedPuls",
 };
 
 export default function RootLayout({ children }) {
