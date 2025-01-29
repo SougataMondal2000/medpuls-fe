@@ -11,7 +11,7 @@ import Cookies from "js-cookie";
 const MediPulsLogo = () => (
   <div className="flex items-center gap-2 text-emerald-600">
     <Heart className="w-8 h-8 fill-emerald-500 stroke-2" />
-    <span className="text-2xl font-bold">MediPuls</span>
+    <span className="text-2xl font-bold">MedPuls</span>
   </div>
 );
 

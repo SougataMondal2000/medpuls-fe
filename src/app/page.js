@@ -11,10 +11,10 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-const MediPulsLogo = () => (
+const MedPulsLogo = () => (
   <div className="flex items-center text-emerald-600">
     <Heart className="w-8 h-8 fill-emerald-500 stroke-2" />
-    <span className="text-2xl font-bold">MediPuls</span>
+    <span className="text-2xl font-bold">MedPuls</span>
   </div>
 );
 
@@ -86,7 +86,7 @@ export default function LandingPage() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-20 items-center">
-            <MediPulsLogo />
+            <MedPulsLogo />
 
             <div className="hidden md:flex items-center space-x-8">
               <a
@@ -265,7 +265,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
             <div>
-              <MediPulsLogo />
+              <MedPulsLogo />
               <p className="mt-4 text-gray-600">
                 Making healthcare management smarter and more efficient.
               </p>
@@ -334,7 +334,7 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-gray-200 text-center text-gray-600">
-            © {new Date().getFullYear()} MediPuls. All rights reserved.
+            © {new Date().getFullYear()} MedPuls. All rights reserved.
           </div>
         </div>
       </footer>
