@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { baseURL } from "../urls";
 import { BeatLoader } from "react-spinners";
+import Cookies from "js-cookie";
 
 const MediPulsLogo = () => (
   <div className="flex items-center gap-2 text-emerald-600">
@@ -36,10 +37,15 @@ const LoginPage = () => {
     try {
       const response = await axios.post(`${baseURL}/login`, formData);
       setMessage(response.data.message);
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("profile", JSON.stringify(response.data.profile));
+
+      Cookies.set("token", response.data.token, { expires: 7, secure: true });
+      Cookies.set("profile", JSON.stringify(response.data.profile), {
+        expires: 7,
+        secure: true,
+      });
+
       setFormData({ email: "", password: "" });
-      router.push("/");
+      router.push("/create-prescription");
     } catch (error) {
       setMessage(
         error.response?.data?.message ||

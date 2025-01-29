@@ -3,14 +3,14 @@ import Link from "next/link";
 import { User, FilePlus, LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { MediPulsLogo } from "../signup/page";
+import Cookies from "js-cookie";
 
 const Navbar = () => {
   const router = useRouter();
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("profile");
-
+    Cookies.remove("token");
+    Cookies.remove("profile");
     router.push("/login");
   };
 
