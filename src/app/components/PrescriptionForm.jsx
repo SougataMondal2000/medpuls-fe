@@ -146,7 +146,9 @@ const PrescriptionForm = () => {
           },
         }
       );
+
       const prescriptionId = response.data._id;
+
       await axios.put(
         `${baseURL}/add-prescription/${prescription.patientDetails}/${profile.id}`,
         { prescriptionId },
@@ -156,7 +158,26 @@ const PrescriptionForm = () => {
           },
         }
       );
+
       alert("Prescription created successfully");
+
+      const pdfResponse = await axios.get(
+        `${baseURL}/prescriptions/download/${prescriptionId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          responseType: "blob",
+        }
+      );
+
+      const blob = new Blob([pdfResponse.data], { type: "application/pdf" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `Prescription_${prescriptionId}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     } catch (error) {
       console.error("Error submitting prescription", error);
     }
