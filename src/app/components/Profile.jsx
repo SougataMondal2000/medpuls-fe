@@ -18,6 +18,7 @@ const Profile = () => {
   const [profile, setProfile] = useState({});
   const [doctor, setDoctor] = useState(null);
   const [prescription, setPrescription] = useState(null);
+  const [patients, setPatients] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedPrescription, setSelectedPrescription] = useState(null);
   const [showPreview, setShowPreview] = useState(false);
@@ -56,28 +57,45 @@ const Profile = () => {
     }
   }, [profile]);
 
-  // useEffect(() => {
-  //   const fetchPrescriptionData = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `${baseURL}/get-all-prescriptions/${profile?.id}`,
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         }
-  //       );
-  //       setPrescription(response.data);
-  //       setLoading(false);
-  //     } catch (error) {
-  //       console.error("Error fetching prescription data:", error);
-  //       setLoading(false);
-  //     }
-  //   };
-  //   if (profile.id) {
-  //     fetchPrescriptionData();
-  //   }
-  // }, [profile]);
+  useEffect(() => {
+    const fetchPrescriptionData = async () => {
+      try {
+        const response = await axios.get(`${baseURL}/get-prescriptions`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setPrescription(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching prescription data:", error);
+        setLoading(false);
+      }
+    };
+    if (token) {
+      fetchPrescriptionData();
+    }
+  }, [token]);
+
+  useEffect(() => {
+    const fetchPatientData = async () => {
+      try {
+        const response = await axios.get(`${baseURL}/patients`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setPatients(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching prescription data:", error);
+        setLoading(false);
+      }
+    };
+    if (token) {
+      fetchPatientData();
+    }
+  }, [token]);
 
   const handlePreviewPrescription = async (patientId) => {
     try {
@@ -122,21 +140,21 @@ const Profile = () => {
                   <div className="flex items-center gap-3">
                     <User className="w-5 h-5 text-green-600" />
                     <span className="text-gray-600">
-                      Dr. {doctor.doctorName}
+                      Dr. {doctor?.doctorName}
                     </span>
                   </div>
                   <div className="flex items-center gap-3">
                     <Mail className="w-5 h-5 text-green-600" />
-                    <span className="text-gray-600">{doctor.email}</span>
+                    <span className="text-gray-600">{doctor?.email}</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <Phone className="w-5 h-5 text-green-600" />
-                    <span className="text-gray-600">{doctor.phoneNo}</span>
+                    <span className="text-gray-600">{doctor?.phoneNo}</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <Building2 className="w-5 h-5 text-green-600" />
                     <span className="text-gray-600">
-                      {doctor.specialty || "General Medicine"}
+                      {doctor?.specialty || "General Medicine"}
                     </span>
                   </div>
                 </div>
@@ -149,7 +167,7 @@ const Profile = () => {
                   <div className="grid grid-cols-2 gap-4">
                     <div className="bg-white rounded-lg p-4 shadow-sm">
                       <div className="text-2xl font-bold text-green-600">
-                        {doctor.patients?.length || 0}
+                        {doctor?.patients?.length || 0}
                       </div>
                       <div className="text-sm text-gray-600">
                         Total Patients
@@ -157,12 +175,7 @@ const Profile = () => {
                     </div>
                     <div className="bg-white rounded-lg p-4 shadow-sm">
                       <div className="text-2xl font-bold text-green-600">
-                        {doctor.patients?.reduce(
-                          (total, patient) =>
-                            total +
-                            (patient.previousPrescriptions?.length || 0),
-                          0
-                        )}
+                        {doctor?.previousPrescriptions?.length || 0}
                       </div>
                       <div className="text-sm text-gray-600">
                         Total Prescriptions
@@ -203,26 +216,28 @@ const Profile = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {doctor.patients?.map((patient) => (
-                    <tr key={patient._id} className="hover:bg-gray-50">
+                  {patients?.map((patient) => (
+                    <tr key={patient?._id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 text-sm text-gray-800">
-                        {patient.name}
+                        {patient?.name}
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-800">
-                        {patient.age}
+                        {patient?.age}
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-800">
-                        {patient.sex}
+                        {patient?.sex}
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-800">
-                        {patient.phone}
+                        {patient?.phone}
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-800">
-                        {patient.previousPrescriptions?.length || 0}
+                        {patient?.previousPrescriptions?.length || 0}
                       </td>
                       <td className="px-6 py-4 text-sm">
                         <button
-                          onClick={() => handlePreviewPrescription(patient._id)}
+                          onClick={() =>
+                            handlePreviewPrescription(patient?._id)
+                          }
                           className="text-green-600 hover:text-green-800 flex items-center gap-2"
                         >
                           <Eye className="w-4 h-4" />
