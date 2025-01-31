@@ -16,6 +16,8 @@ import {
   Clock,
   Calendar,
   MessageSquare,
+  ContactRound,
+  FolderCode,
 } from "lucide-react";
 import Cookies from "js-cookie";
 
@@ -36,9 +38,9 @@ export default function Sidebar({ children }) {
 
   const menuItems = [
     {
-      id: "management",
-      label: "Management",
-      icon: <Users size={20} />,
+      id: "misc-management",
+      label: "Misc Management",
+      icon: <FolderCode size={20} />,
       subItems: [
         {
           id: "add-test",
@@ -76,11 +78,24 @@ export default function Sidebar({ children }) {
           path: "/add-remarks",
           icon: <MessageSquare size={16} />,
         },
+      ],
+    },
+    {
+      id: "patient-management",
+      label: "Patient Management",
+      icon: <User size={20} />,
+      subItems: [
         {
           id: "add-patient",
           label: "Add Patient",
           path: "/add-patient",
           icon: <UserPlus size={16} />,
+        },
+        {
+          id: "all-patients",
+          label: "All Patients",
+          path: "/all-patients",
+          icon: <ContactRound size={16} />,
         },
         {
           id: "create-prescription",

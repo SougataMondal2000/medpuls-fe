@@ -11,6 +11,7 @@ import {
   getBMIMessage,
 } from "../bmiCalculator";
 import PrescriptionPreview from "./PrescriptionPreview ";
+import { BeatLoader } from "react-spinners";
 
 const Profile = () => {
   const router = useRouter();
@@ -118,8 +119,14 @@ const Profile = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-green-50 to-white py-12 px-4">
-        <div className="max-w-6xl mx-auto">Loading...</div>
+      <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-green-50 to-white">
+        <BeatLoader
+          color={"#56DDC3"}
+          loading={loading}
+          size={30}
+          aria-label="Loading Spinner"
+          data-testid="loader"
+        />
       </div>
     );
   }

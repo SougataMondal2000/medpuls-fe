@@ -12,6 +12,7 @@ const MiscComponent = ({ miscType, sampleFile, miscName }) => {
   const [excelFile, setExcelFile] = useState(null);
   const [message, setMessage] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef(null);
 
   const [token, setToken] = useState("");
@@ -43,6 +44,7 @@ const MiscComponent = ({ miscType, sampleFile, miscName }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       if (names.length === 1 && names[0]) {
         await axios.post(
@@ -72,6 +74,7 @@ const MiscComponent = ({ miscType, sampleFile, miscName }) => {
           text: "Bulk data uploaded successfully!",
         });
       }
+      setIsLoading(false);
     } catch (error) {
       setMessage({ type: "error", text: error.response.data.message });
     }
@@ -207,8 +210,19 @@ const MiscComponent = ({ miscType, sampleFile, miscName }) => {
               <button
                 type="submit"
                 className="px-6 py-3 bg-green-700 hover:bg-green-800 text-white rounded-lg transition-colors duration-200"
+                disabled={isLoading}
               >
-                Submit Records
+                {isLoading ? (
+                  <BeatLoader
+                    color={"white"}
+                    loading={isLoading}
+                    size={10}
+                    aria-label="Loading Spinner"
+                    data-testid="loader"
+                  />
+                ) : (
+                  <>Submit Records</>
+                )}
               </button>
             </div>
           </form>

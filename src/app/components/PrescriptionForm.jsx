@@ -27,11 +27,14 @@ import {
   calculateBMIPosition,
   getBMIMessage,
 } from "../bmiCalculator";
+import toast, { Toaster } from "react-hot-toast";
+import { BeatLoader } from "react-spinners";
 
 const PrescriptionForm = () => {
   const router = useRouter();
   const [token, setToken] = useState("");
   const [profile, setProfile] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const storedToken = Cookies.get("token");
@@ -135,6 +138,7 @@ const PrescriptionForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       prescription.doctorDetails = profile.id;
       const response = await axios.post(
@@ -159,8 +163,8 @@ const PrescriptionForm = () => {
         }
       );
 
-      alert("Prescription created successfully");
-
+      toast.success("Prescription created successfully");
+      setIsLoading(false);
       const pdfResponse = await axios.get(
         `${baseURL}/prescriptions/download/${prescriptionId}`,
         {
@@ -179,7 +183,7 @@ const PrescriptionForm = () => {
       link.click();
       document.body.removeChild(link);
     } catch (error) {
-      console.error("Error submitting prescription", error);
+      toast.error("Error submitting prescription", error);
     }
   };
 
@@ -187,6 +191,7 @@ const PrescriptionForm = () => {
 
   return (
     <div className="max-w-7xl mx-auto p-8">
+      <Toaster position="bottom-right" reverseOrder={false} />
       <div className="bg-white rounded-xl shadow-lg border border-green-100 overflow-hidden">
         <div className="p-6 border-b border-green-100">
           <h2 className="text-2xl font-bold text-green-700 flex items-center gap-2">
@@ -484,11 +489,24 @@ const PrescriptionForm = () => {
 
           <button
             type="submit"
+            disabled={isLoading}
             className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold"
             onClick={handleSubmit}
           >
-            <Send className="h-5 w-5" />
-            Submit Prescription
+            {isLoading ? (
+              <BeatLoader
+                color={"white"}
+                loading={isLoading}
+                size={10}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+              />
+            ) : (
+              <>
+                <Send className="h-5 w-5" />
+                Submit Prescription
+              </>
+            )}
           </button>
         </div>
       </div>
