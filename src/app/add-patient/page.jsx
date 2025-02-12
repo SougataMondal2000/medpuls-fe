@@ -264,7 +264,6 @@ const PatientRegistrationForm = () => {
                     value={formData.guardianName}
                     onChange={handleChange}
                     className={inputClasses}
-                    required
                   />
                 </div>
               </div>
@@ -301,7 +300,6 @@ const PatientRegistrationForm = () => {
                     value={formData.mail}
                     onChange={handleChange}
                     className={inputClasses}
-                    required
                   />
                 </div>
               </div>
@@ -324,7 +322,6 @@ const PatientRegistrationForm = () => {
                     value={formData.address.addressLine1}
                     onChange={handleChange}
                     className={inputClasses}
-                    required
                   />
                 </div>
                 <div>
@@ -352,7 +349,6 @@ const PatientRegistrationForm = () => {
                       value={formData.address.city}
                       onChange={handleChange}
                       className={inputClasses}
-                      required
                     />
                   </div>
                   <div>
@@ -366,7 +362,6 @@ const PatientRegistrationForm = () => {
                       value={formData.address.state}
                       onChange={handleChange}
                       className={inputClasses}
-                      required
                     />
                   </div>
                   <div>
@@ -406,7 +401,6 @@ const PatientRegistrationForm = () => {
                       value={formData.height}
                       onChange={handleChange}
                       className={`${inputClasses} pl-10`}
-                      required
                     />
                   </div>
                 </div>
@@ -423,7 +417,6 @@ const PatientRegistrationForm = () => {
                       value={formData.weight}
                       onChange={handleChange}
                       className={`${inputClasses} pl-10`}
-                      required
                     />
                   </div>
                 </div>
@@ -525,7 +518,6 @@ const PatientRegistrationForm = () => {
                       value={formData.pulse}
                       onChange={handleChange}
                       className={`${inputClasses} pl-10`}
-                      required
                     />
                   </div>
                 </div>
@@ -543,7 +535,6 @@ const PatientRegistrationForm = () => {
                       onChange={handleChange}
                       className={`${inputClasses} pl-10`}
                       placeholder="120/80"
-                      required
                     />
                   </div>
                 </div>

@@ -5,6 +5,7 @@ import { baseURL } from "../urls";
 import { Download, Plus, Upload } from "lucide-react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import { BeatLoader } from "react-spinners";
 
 const MiscComponent = ({ miscType, sampleFile, miscName }) => {
   const router = useRouter();
