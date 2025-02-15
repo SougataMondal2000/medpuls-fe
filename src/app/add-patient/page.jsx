@@ -375,7 +375,6 @@ const PatientRegistrationForm = () => {
                       value={formData.address.pincode}
                       onChange={handleChange}
                       className={inputClasses}
-                      required
                     />
                   </div>
                 </div>
