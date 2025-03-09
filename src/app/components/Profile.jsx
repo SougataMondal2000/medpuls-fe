@@ -146,9 +146,7 @@ const Profile = () => {
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">
                     <User className="w-5 h-5 text-green-600" />
-                    <span className="text-gray-600">
-                      Dr. {doctor?.doctorName}
-                    </span>
+                    <span className="text-gray-600">{doctor?.doctorName}</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <Mail className="w-5 h-5 text-green-600" />
